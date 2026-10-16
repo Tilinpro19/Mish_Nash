@@ -2,104 +2,1097 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>John Nash — El Pasillo hacia la Luz</title>
-<meta name="description" content="Recorrido inmersivo por la vida de John Nash: el prodigio, el laberinto, el equilibrio y la luz del Nobel.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#07060a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>John Nash — El Pasillo hacia la Luz | Exposición Interactiva MAC Lima</title>
+<meta name="description" content="Recorrido inmersivo por la vida de John Nash: el prodigio de Princeton, el laberinto de la mente, la teoría de juegos y la luz del Nobel.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--gold:#e8b960;--gold-soft:#c9a05a;--ink:#07060a;--text:#e9e2d3;--muted:#a79f8f}
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{background:var(--ink);color:var(--text);font-family:Inter,system-ui,sans-serif;font-weight:300;line-height:1.7;overflow-x:hidden}
+:root {
+  --gold: #e8b960;
+  --gold-light: #f7d58b;
+  --gold-soft: #c9a05a;
+  --gold-glow: rgba(232, 185, 96, 0.35);
+  --ink: #07060a;
+  --card-bg: rgba(13, 12, 18, 0.82);
+  --card-border: rgba(232, 185, 96, 0.22);
+  --text: #ede8dc;
+  --muted: #a69e90;
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; height: 100%; }
+body {
+  background: var(--ink);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-weight: 300;
+  line-height: 1.7;
+  overflow-x: hidden;
+  min-height: 100%;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
 
 /* ---------- Escenario fijo: el pasillo ---------- */
-#stage{position:fixed;inset:0;z-index:0;overflow:hidden;background:#000}
-#corridor{position:absolute;inset:0;background:url("img/pasillo-nuevo.webp") 50% 48%/cover no-repeat;
-  transform-origin:50% 48%;will-change:transform,filter;
-  transform:scale(calc(1 + var(--p,0)*2.4));
-  filter:brightness(calc(.55 + var(--p,0)*.6)) saturate(1.05)}
-#veil{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,transparent 25%,rgba(0,0,0,.75) 100%);pointer-events:none}
-#shade{position:absolute;inset:0;background:#000;opacity:var(--shade,.5);transition:opacity .6s;pointer-events:none}
-#dust{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen}
-#glow{position:absolute;left:50%;top:48%;width:60vmin;height:60vmin;transform:translate(-50%,-50%);
-  background:radial-gradient(circle,rgba(255,200,100,.55),transparent 65%);opacity:var(--glow,0);pointer-events:none;mix-blend-mode:screen}
+#stage {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: #000;
+  pointer-events: none;
+}
+#corridor {
+  position: absolute;
+  inset: 0;
+  background: url("img/pasillo-nuevo.webp") 50% 48% / cover no-repeat;
+  transform-origin: 50% 48%;
+  will-change: transform, filter;
+  transform: scale(calc(1 + var(--p, 0) * 2.5));
+  filter: brightness(calc(0.52 + var(--p, 0) * 0.65)) saturate(1.08);
+  transition: filter 0.3s ease-out;
+}
+#veil {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 46%, transparent 15%, rgba(7, 6, 10, 0.8) 85%);
+  pointer-events: none;
+}
+#shade {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: var(--shade, 0.45);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+#dust {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+#glow {
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  width: 65vmin;
+  height: 65vmin;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(255, 215, 120, 0.65) 0%, rgba(232, 185, 96, 0.25) 40%, transparent 70%);
+  opacity: var(--glow, 0);
+  pointer-events: none;
+  mix-blend-mode: screen;
+  transition: opacity 0.8s ease;
+}
 
-/* ---------- Navegación ---------- */
-#bar{position:fixed;left:0;top:0;height:2px;width:calc(var(--p,0)*100%);background:linear-gradient(90deg,transparent,var(--gold));z-index:50}
-#hud{position:fixed;right:20px;top:50%;transform:translateY(-50%);z-index:40;display:flex;flex-direction:column;gap:14px}
-#hud a{width:9px;height:9px;border-radius:50%;border:1px solid var(--gold-soft);display:block;opacity:.5;transition:.3s;position:relative}
-#hud a.on{background:var(--gold);opacity:1;box-shadow:0 0 12px var(--gold)}
-#hud a span{position:absolute;right:20px;top:50%;transform:translateY(-50%);white-space:nowrap;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);opacity:0;transition:.3s;pointer-events:none}
-#hud a:hover span{opacity:1}
-#meters{position:fixed;left:20px;bottom:18px;z-index:40;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-soft);opacity:.8}
+/* ---------- Barra de progreso superior ---------- */
+#bar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 3px;
+  width: calc(var(--p, 0) * 100%);
+  background: linear-gradient(90deg, transparent 0%, var(--gold-soft) 40%, var(--gold-light) 100%);
+  box-shadow: 0 0 10px rgba(232, 185, 96, 0.8);
+  z-index: 70;
+  pointer-events: none;
+  transition: width 0.05s linear;
+}
 
-/* ---------- Capítulos ---------- */
-main{position:relative;z-index:10}
-section{min-height:100vh;display:flex;align-items:center;padding:12vh 6vw}
-section.right{justify-content:flex-end}
-section.center{justify-content:center;text-align:center}
-.card{max-width:520px;padding:34px 32px;background:linear-gradient(135deg,rgba(7,6,10,.78),rgba(7,6,10,.5));
-  backdrop-filter:blur(6px);border-left:1px solid var(--gold-soft);opacity:0;transform:translateY(40px);transition:opacity 1.2s,transform 1.2s}
-section.center .card{border-left:0;;border-top:1px solid var(--gold-soft);max-width:680px}
-.in .card{opacity:1;transform:none}
-.kicker{font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
-h1,h2{font-family:"Cormorant Garamond",serif;font-weight:400;line-height:1.05;color:#fff}
-h1{font-size:clamp(3rem,10vw,7.5rem);letter-spacing:-.01em}
-h2{font-size:clamp(2rem,4.6vw,3.4rem);margin-bottom:18px}
-h1 em,h2 em{color:var(--gold);font-style:italic}
-p{color:var(--text);font-size:1.02rem}
-p+p{margin-top:14px}
-.quote{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:1.5rem;color:var(--gold);margin:18px 0;line-height:1.35}
-.date{font-family:"Cormorant Garamond",serif;font-size:1.1rem;color:var(--muted);margin-top:18px}
+/* ---------- Cabecera superior ---------- */
+#topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 55;
+  height: calc(54px + var(--safe-top));
+  padding: var(--safe-top) max(20px, var(--safe-right)) 0 max(20px, var(--safe-left));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(180deg, rgba(7, 6, 10, 0.85) 0%, rgba(7, 6, 10, 0) 100%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  pointer-events: auto;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text);
+}
+.brand-pill {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 1px solid rgba(232, 185, 96, 0.4);
+  padding: 3px 8px;
+  border-radius: 20px;
+  background: rgba(232, 185, 96, 0.08);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.brand-pill::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 6px var(--gold);
+}
+.brand-title {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  letter-spacing: 0.02em;
+  color: #fff;
+  white-space: nowrap;
+}
 
-#hero{flex-direction:column;justify-content:center;text-align:center;min-height:100vh}
-#hero .sub{max-width:520px;margin:22px auto 0;color:var(--muted);font-size:1.05rem}
-#hero .go{margin-top:44px;font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:var(--gold);animation:bob 2.6s ease-in-out infinite}
-@keyframes bob{50%{transform:translateY(8px);opacity:.6}}
-#hero .wrap{opacity:0;animation:fade 2.4s .4s forwards}
-@keyframes fade{to{opacity:1}}
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nav-btn {
+  background: rgba(18, 16, 24, 0.65);
+  border: 1px solid rgba(232, 185, 96, 0.3);
+  color: var(--gold-light);
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  height: 32px;
+}
+.nav-btn:hover {
+  background: rgba(232, 185, 96, 0.18);
+  border-color: var(--gold);
+  color: #fff;
+  box-shadow: 0 0 12px rgba(232, 185, 96, 0.25);
+}
+.nav-btn:active {
+  transform: scale(0.96);
+}
+.waves {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+}
+.waves span {
+  width: 2px;
+  height: 4px;
+  background: var(--gold);
+  border-radius: 1px;
+  transition: height 0.2s;
+}
+.audio-on .waves span:nth-child(1) { animation: wave 1s infinite alternate ease-in-out; }
+.audio-on .waves span:nth-child(2) { animation: wave 0.8s 0.2s infinite alternate ease-in-out; }
+.audio-on .waves span:nth-child(3) { animation: wave 1.2s 0.4s infinite alternate ease-in-out; }
+@keyframes wave {
+  0% { height: 3px; }
+  100% { height: 12px; }
+}
 
-/* ---------- Matriz interactiva ---------- */
-.matrix{display:grid;grid-template-columns:auto 1fr 1fr;gap:6px;margin:22px 0 14px;font-size:.85rem}
-.matrix div{padding:12px 6px;text-align:center;border:1px solid rgba(232,185,96,.25);background:rgba(0,0,0,.35)}
-.matrix .h{border:0;background:none;color:var(--gold-soft);font-size:10px;letter-spacing:.18em;text-transform:uppercase;display:flex;align-items:center;justify-content:center}
-.matrix .cell.nash{border-color:var(--gold);box-shadow:0 0 18px rgba(232,185,96,.35) inset}
-.matrix .cell.hit{background:rgba(232,185,96,.22)}
-.btns{display:flex;gap:10px;flex-wrap:wrap}
-button{font:inherit;font-size:.8rem;letter-spacing:.15em;text-transform:uppercase;padding:12px 20px;background:transparent;color:var(--gold);border:1px solid var(--gold);cursor:pointer;transition:.3s}
-button:hover{background:var(--gold);color:#000}
-#result{margin-top:16px;min-height:6.5em;font-size:.95rem;color:var(--text)}
+/* ---------- Navegación lateral Escritorio ---------- */
+#hud {
+  position: fixed;
+  right: max(24px, var(--safe-right));
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+#hud a {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid var(--gold-soft);
+  display: block;
+  opacity: 0.45;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  background: transparent;
+  outline: none;
+}
+#hud a.on {
+  background: var(--gold);
+  opacity: 1;
+  transform: scale(1.35);
+  box-shadow: 0 0 12px var(--gold), 0 0 20px var(--gold-glow);
+  border-color: var(--gold-light);
+}
+#hud a span {
+  position: absolute;
+  right: 22px;
+  top: 50%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  opacity: 0;
+  pointer-events: none;
+  background: rgba(10, 9, 14, 0.85);
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(232, 185, 96, 0.25);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+#hud a:hover span, #hud a:focus span {
+  opacity: 1;
+  transform: translateY(-50%) translateX(-4px);
+}
+#hud a.on span {
+  opacity: 0.85;
+}
 
-/* ---------- Retratos y datos ---------- */
-.photo{display:flex;gap:18px;align-items:flex-end;margin:0 0 22px}
-.photo figure{flex:1;margin:0}
-.photo img{display:block;width:100%;aspect-ratio:3/4;object-fit:cover;filter:grayscale(1) contrast(1.05) brightness(.9);border:1px solid var(--gold-soft)}
-.photo figcaption{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-soft);margin-top:8px}
-.single{max-width:210px;margin-bottom:22px}
-.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:22px 0 0;text-align:center}
-.facts div{border:1px solid rgba(232,185,96,.3);padding:12px 4px;background:rgba(0,0,0,.35)}
-.facts b{display:block;font-family:"Cormorant Garamond",serif;font-size:1.7rem;color:var(--gold);font-weight:400;line-height:1}
-.facts span{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
-.two{max-width:760px}
-.worlds{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px;text-align:left}
-.worlds div{padding:14px;border:1px solid rgba(232,185,96,.25);background:rgba(0,0,0,.35);font-size:.92rem}
-.worlds b{display:block;color:var(--gold);font-family:"Cormorant Garamond",serif;font-size:1.3rem;font-weight:400;margin-bottom:4px}
-cite{display:block;font-size:.8rem;color:var(--muted);font-style:normal;letter-spacing:.1em;margin-top:-8px}
-.sources{margin-top:10px;max-width:640px;margin-inline:auto;line-height:1.8}
-/* ---------- Medalla final ---------- */
-#epilogo .card{background:linear-gradient(135deg,rgba(7,6,10,.55),rgba(7,6,10,.25))}
-footer{position:relative;z-index:10;text-align:center;padding:40px 20px 60px;font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
-footer a{color:var(--gold-soft);text-decoration:none}
+/* Indicador de distancia escritorio */
+#meters {
+  position: fixed;
+  left: max(24px, var(--safe-left));
+  bottom: max(24px, var(--safe-bottom));
+  z-index: 50;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+  background: rgba(12, 11, 16, 0.7);
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(232, 185, 96, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+#meters b {
+  color: var(--gold-light);
+  font-variant-numeric: tabular-nums;
+  min-width: 28px;
+}
 
-@media (max-width:700px){#hud{display:none}.worlds{grid-template-columns:1fr}.photo{gap:10px}.card{padding:26px 22px}section{padding:10vh 5vw}}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.card{transition:none}#hero .go{animation:none}}
+/* ---------- Barra flotante inferior Móvil (Thumb-zone) ---------- */
+#mobile-nav {
+  display: none;
+  position: fixed;
+  bottom: calc(14px + var(--safe-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 28px);
+  max-width: 440px;
+  z-index: 60;
+  background: rgba(14, 12, 20, 0.88);
+  border: 1px solid rgba(232, 185, 96, 0.32);
+  border-radius: 28px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.7), 0 0 18px rgba(232, 185, 96, 0.15);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 6px 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+.m-nav-btn {
+  background: transparent;
+  border: 0;
+  color: var(--gold);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.m-nav-btn:active {
+  background: rgba(232, 185, 96, 0.2);
+}
+.m-chapter-trigger {
+  flex: 1;
+  background: transparent;
+  border: 0;
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 6px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.m-chapter-trigger b {
+  color: var(--gold);
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.m-progress-pill {
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  color: var(--gold-light);
+  background: rgba(232, 185, 96, 0.15);
+  padding: 3px 8px;
+  border-radius: 12px;
+  border: 1px solid rgba(232, 185, 96, 0.25);
+  margin-left: 4px;
+}
+
+/* Drawer / Sheet de Capítulos para Móvil */
+#chapter-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+#chapter-drawer.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.drawer-content {
+  background: #0d0c13;
+  border-top: 1px solid rgba(232, 185, 96, 0.35);
+  border-radius: 22px 22px 0 0;
+  padding: 20px 20px calc(24px + var(--safe-bottom));
+  max-height: 80vh;
+  overflow-y: auto;
+  transform: translateY(100%);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+#chapter-drawer.open .drawer-content {
+  transform: translateY(0);
+}
+.drawer-handle {
+  width: 44px;
+  height: 4px;
+  background: rgba(232, 185, 96, 0.4);
+  border-radius: 2px;
+  margin: 0 auto 16px;
+}
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(232, 185, 96, 0.15);
+}
+.drawer-header h3 {
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  color: var(--gold);
+}
+.drawer-close {
+  background: rgba(255, 255, 255, 0.08);
+  border: 0;
+  color: var(--muted);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.drawer-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.drawer-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  background: rgba(232, 185, 96, 0.04);
+  border: 1px solid rgba(232, 185, 96, 0.15);
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--text);
+  font-size: 0.95rem;
+  transition: all 0.2s;
+}
+.drawer-item.active {
+  background: rgba(232, 185, 96, 0.18);
+  border-color: var(--gold);
+  color: #fff;
+}
+.drawer-item span {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+}
+
+/* ---------- Secciones y Capítulos ---------- */
+main {
+  position: relative;
+  z-index: 10;
+}
+section {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  padding: clamp(70px, 12vh, 120px) max(20px, 6vw);
+}
+section.right {
+  justify-content: flex-end;
+}
+section.center {
+  justify-content: center;
+  text-align: center;
+}
+
+/* ---------- Tarjetas de contenido (Glassmorphism de Museo) ---------- */
+.card {
+  max-width: 540px;
+  width: 100%;
+  padding: clamp(24px, 4vw, 40px);
+  background: linear-gradient(145deg, rgba(14, 12, 19, 0.88), rgba(8, 7, 12, 0.78));
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  box-shadow: 0 24px 50px -10px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(232, 185, 96, 0.28);
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+section.center .card {
+  max-width: 720px;
+}
+.in .card {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Tipografía */
+.kicker {
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.kicker::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 8px var(--gold);
+}
+section.center .kicker {
+  justify-content: center;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  line-height: 1.1;
+  color: #fff;
+}
+h1 {
+  font-size: clamp(2.8rem, 8.5vw, 6.2rem);
+  letter-spacing: -0.015em;
+  line-height: 1.02;
+}
+h2 {
+  font-size: clamp(2rem, 4.4vw, 3.2rem);
+  margin-bottom: 18px;
+}
+h1 em, h2 em, h3 em {
+  color: var(--gold);
+  font-style: italic;
+  font-weight: 400;
+}
+p {
+  color: var(--text);
+  font-size: clamp(0.96rem, 2.2vw, 1.05rem);
+  line-height: 1.75;
+}
+p + p {
+  margin-top: 14px;
+}
+.quote {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1.25rem, 3.2vw, 1.6rem);
+  color: var(--gold-light);
+  margin: 22px 0 14px;
+  line-height: 1.4;
+  position: relative;
+  padding-left: 20px;
+  border-left: 2px solid var(--gold);
+}
+section.center .quote {
+  padding-left: 0;
+  border-left: 0;
+  border-top: 1px solid rgba(232, 185, 96, 0.3);
+  border-bottom: 1px solid rgba(232, 185, 96, 0.3);
+  padding: 16px 0;
+}
+cite {
+  display: block;
+  font-size: 0.82rem;
+  color: var(--muted);
+  font-style: normal;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: -6px;
+  margin-bottom: 18px;
+}
+.date {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  color: var(--gold-soft);
+  margin-top: 20px;
+  font-style: italic;
+}
+
+/* ---------- Hero ---------- */
+#hero {
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+#hero .wrap {
+  opacity: 0;
+  animation: heroFade 1.8s 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  max-width: 760px;
+  margin: 0 auto;
+}
+@keyframes heroFade {
+  to { opacity: 1; transform: none; }
+}
+#hero .sub {
+  max-width: 580px;
+  margin: 22px auto 0;
+  color: var(--text);
+  font-size: clamp(1.05rem, 2.5vw, 1.25rem);
+  line-height: 1.65;
+}
+#hero .go-btn {
+  margin-top: 40px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(232, 185, 96, 0.08);
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  padding: 12px 28px;
+  border-radius: 30px;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 15px rgba(232, 185, 96, 0.15);
+  animation: pulseWalk 2.6s infinite ease-in-out;
+}
+#hero .go-btn:hover {
+  background: var(--gold);
+  color: #000;
+  box-shadow: 0 0 25px rgba(232, 185, 96, 0.5);
+}
+@keyframes pulseWalk {
+  0%, 100% { transform: translateY(0); box-shadow: 0 0 15px rgba(232, 185, 96, 0.15); }
+  50% { transform: translateY(6px); box-shadow: 0 0 25px rgba(232, 185, 96, 0.35); }
+}
+
+/* Indicadores / Facts */
+.facts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 30px auto 0;
+  max-width: 580px;
+}
+.facts > div {
+  border: 1px solid rgba(232, 185, 96, 0.25);
+  background: rgba(14, 12, 20, 0.65);
+  border-radius: 10px;
+  padding: 14px 8px;
+  text-align: center;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: border-color 0.3s;
+}
+.facts > div:hover {
+  border-color: var(--gold);
+}
+.facts b {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: clamp(1.8rem, 4vw, 2.3rem);
+  color: var(--gold);
+  font-weight: 400;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.facts span {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  line-height: 1.3;
+  display: block;
+}
+
+/* ---------- Retratos y Archivos ---------- */
+.photo-frame {
+  margin-bottom: 24px;
+  position: relative;
+  display: inline-block;
+}
+.photo-frame figure {
+  margin: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(232, 185, 96, 0.4);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.6), 0 0 15px rgba(232, 185, 96, 0.15);
+  background: #000;
+}
+.photo-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3/4;
+  object-fit: cover;
+  filter: grayscale(0.85) contrast(1.1) brightness(0.95);
+  transition: filter 0.5s ease, transform 0.5s ease;
+}
+.photo-frame:hover img {
+  filter: grayscale(0.4) contrast(1.1) brightness(1);
+  transform: scale(1.02);
+}
+.photo-frame figcaption {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+  margin-top: 8px;
+  text-align: center;
+}
+.photo-single {
+  max-width: 190px;
+  margin-inline: auto;
+  display: block;
+}
+
+/* Badges de Medallas (Nobel & Abel) */
+.award-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, rgba(232, 185, 96, 0.18), rgba(232, 185, 96, 0.05));
+  border: 1px solid var(--gold);
+  padding: 10px 16px;
+  border-radius: 8px;
+  margin: 18px 0;
+  text-align: left;
+}
+.award-medal {
+  font-size: 26px;
+  color: var(--gold-light);
+  line-height: 1;
+}
+.award-info b {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  color: var(--gold-light);
+  line-height: 1.2;
+}
+.award-info span {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ---------- Capítulo II: Dos Mundos (Interactivo) ---------- */
+.worlds-container {
+  margin: 24px 0 12px;
+}
+.worlds-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.world-tab-btn {
+  flex: 1;
+  padding: 10px 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(232, 185, 96, 0.2);
+  color: var(--muted);
+  border-radius: 8px;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+.world-tab-btn.active {
+  background: rgba(232, 185, 96, 0.18);
+  border-color: var(--gold);
+  color: #fff;
+  box-shadow: 0 0 12px rgba(232, 185, 96, 0.2);
+}
+.worlds-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.world-card {
+  padding: 18px 16px;
+  border-radius: 8px;
+  transition: all 0.35s ease;
+  position: relative;
+  overflow: hidden;
+}
+.world-card.logic {
+  border: 1px solid rgba(232, 185, 96, 0.35);
+  background: linear-gradient(135deg, rgba(14, 18, 28, 0.7), rgba(9, 12, 19, 0.6));
+}
+.world-card.shadows {
+  border: 1px solid rgba(190, 70, 70, 0.35);
+  background: linear-gradient(135deg, rgba(28, 12, 16, 0.7), rgba(18, 8, 12, 0.6));
+}
+.world-card b {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 400;
+  margin-bottom: 6px;
+}
+.world-card.logic b { color: var(--gold); }
+.world-card.shadows b { color: #f07b7b; }
+.world-card p {
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--text);
+  margin: 0;
+}
+
+/* ---------- Capítulo III: Matriz Interactiva ---------- */
+.matrix-wrapper {
+  margin: 22px 0 16px;
+  background: rgba(10, 9, 14, 0.65);
+  border: 1px solid rgba(232, 185, 96, 0.2);
+  border-radius: 12px;
+  padding: 16px 14px;
+}
+.matrix-legend {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+  text-align: center;
+  margin-bottom: 12px;
+}
+.matrix {
+  display: grid;
+  grid-template-columns: 1.1fr 1.4fr 1.4fr;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+.matrix-cell {
+  padding: 12px 8px;
+  text-align: center;
+  border: 1px solid rgba(232, 185, 96, 0.2);
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 58px;
+}
+.matrix-h {
+  border: 0;
+  background: transparent;
+  color: var(--gold-soft);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.3;
+}
+.matrix-cell.nash {
+  border-color: rgba(232, 185, 96, 0.5);
+  position: relative;
+}
+.matrix-cell.nash::after {
+  content: "★ Nash";
+  position: absolute;
+  top: 3px;
+  right: 5px;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  color: var(--gold);
+}
+.matrix-cell.hit {
+  background: rgba(232, 185, 96, 0.28);
+  border-color: var(--gold);
+  transform: scale(1.03);
+  box-shadow: 0 0 16px rgba(232, 185, 96, 0.4);
+}
+.cell-val {
+  font-weight: 500;
+  font-size: 1.1rem;
+  color: #fff;
+}
+.cell-sub {
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+  margin-top: 2px;
+}
+
+.game-controls {
+  margin-top: 16px;
+}
+.game-label {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+  margin-bottom: 8px;
+}
+.btns {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+.game-btn {
+  flex: 1;
+  font: inherit;
+  font-size: 0.85rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 14px 16px;
+  background: rgba(232, 185, 96, 0.06);
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.game-btn:hover {
+  background: rgba(232, 185, 96, 0.25);
+  box-shadow: 0 0 16px rgba(232, 185, 96, 0.3);
+}
+.game-btn:active, .game-btn.active {
+  background: var(--gold);
+  color: #000;
+  font-weight: 500;
+}
+
+#result {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 8px;
+  background: rgba(232, 185, 96, 0.08);
+  border-left: 3px solid var(--gold);
+  font-size: 0.95rem;
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 70px;
+  transition: all 0.3s;
+}
+
+/* ---------- Botones Generales ---------- */
+.btn-primary {
+  font: inherit;
+  font-size: 0.85rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 14px 28px;
+  background: rgba(232, 185, 96, 0.1);
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 0 16px rgba(232, 185, 96, 0.2);
+}
+.btn-primary:hover {
+  background: var(--gold);
+  color: #000;
+  box-shadow: 0 0 25px rgba(232, 185, 96, 0.45);
+}
+.btn-primary:active {
+  transform: scale(0.97);
+}
+
+/* ---------- Footer ---------- */
+footer {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 60px 24px calc(90px + var(--safe-bottom));
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-top: 1px solid rgba(232, 185, 96, 0.15);
+  background: linear-gradient(180deg, transparent 0%, rgba(7, 6, 10, 0.95) 100%);
+}
+footer b {
+  color: var(--gold);
+  font-weight: 400;
+}
+.sources {
+  margin-top: 14px;
+  max-width: 680px;
+  margin-inline: auto;
+  line-height: 1.8;
+  font-size: 0.72rem;
+  color: #7b7468;
+}
+
+/* ---------- Responsive Breakpoints ---------- */
+@media (max-width: 860px) {
+  #hud { display: none; }
+  #meters { display: none; }
+  #mobile-nav { display: flex; }
+  section {
+    padding: clamp(60px, 10vh, 90px) 16px;
+    justify-content: center !important;
+  }
+  .card {
+    max-width: 100% !important;
+    padding: 24px 20px;
+  }
+  .facts {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .facts > div {
+    padding: 10px 4px;
+  }
+  .photo-single {
+    max-width: 160px;
+  }
+  .worlds-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .matrix {
+    font-size: 0.82rem;
+  }
+  .matrix-cell {
+    padding: 8px 4px;
+    min-height: 52px;
+  }
+  .cell-val {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .brand-title { display: none; }
+  .facts b { font-size: 1.6rem; }
+  .facts span { font-size: 9px; }
+  .game-btn { font-size: 0.75rem; padding: 12px 10px; }
+  .btn-text { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .card { transition: none; opacity: 1; transform: none; }
+  #hero .wrap { animation: none; opacity: 1; }
+  #hero .go-btn { animation: none; }
+  #dust { display: none; }
+}
 </style>
 </head>
 <body>
 
-<div id="bar"></div>
+<!-- Barra de progreso superior -->
+<div id="bar" aria-hidden="true"></div>
+
+<!-- Escenario de fondo inmersivo -->
 <div id="stage" aria-hidden="true">
   <div id="corridor"></div>
   <div id="glow"></div>
@@ -108,154 +1101,610 @@ footer a{color:var(--gold-soft);text-decoration:none}
   <div id="veil"></div>
 </div>
 
-<nav id="hud" aria-label="Capítulos">
-  <a href="#hero"><span>Inicio</span></a>
-  <a href="#c1"><span>I · El prodigio</span></a>
-  <a href="#c2"><span>II · El laberinto</span></a>
-  <a href="#c3"><span>III · El equilibrio</span></a>
-  <a href="#c4"><span>IV · La luz</span></a>
-  <a href="#c5"><span>V · El último viaje</span></a>
-</nav>
-<div id="meters">Distancia a la luz · <b id="dist">100</b>%</div>
+<!-- Cabecera de navegación superior -->
+<header id="topbar">
+  <a href="#hero" class="brand" aria-label="Ir al inicio">
+    <span class="brand-pill">MAC Lima</span>
+    <span class="brand-title">John Nash · El Pasillo hacia la Luz</span>
+  </a>
+  <div class="top-actions">
+    <button id="audio-toggle" class="nav-btn" aria-label="Activar atmósfera sonora" title="Atmósfera sonora">
+      <span class="icon">♪</span>
+      <span class="btn-text">Atmósfera</span>
+      <span class="waves"><span></span><span></span><span></span></span>
+    </button>
+    <button id="fs-toggle" class="nav-btn" aria-label="Pantalla completa" title="Pantalla completa">
+      <span class="icon">⛶</span>
+    </button>
+  </div>
+</header>
 
+<!-- Navegación lateral para Escritorio -->
+<nav id="hud" aria-label="Capítulos">
+  <a href="#hero" class="on" data-index="0"><span>Inicio</span></a>
+  <a href="#c1" data-index="1"><span>I · El prodigio</span></a>
+  <a href="#c2" data-index="2"><span>II · El laberinto</span></a>
+  <a href="#c3" data-index="3"><span>III · El equilibrio</span></a>
+  <a href="#c4" data-index="4"><span>IV · La luz</span></a>
+  <a href="#c5" data-index="5"><span>V · El último viaje</span></a>
+  <a href="#epilogo" data-index="6"><span>Epílogo</span></a>
+</nav>
+
+<!-- Indicador de distancia en escritorio -->
+<div id="meters" aria-hidden="true">
+  Hacia la luz · <b id="dist">100</b>%
+</div>
+
+<!-- Barra de navegación flotante para Celulares -->
+<nav id="mobile-nav" aria-label="Navegación móvil">
+  <button id="m-prev" class="m-nav-btn" aria-label="Capítulo anterior">‹</button>
+  <button id="m-trigger" class="m-chapter-trigger" aria-label="Ver lista de capítulos">
+    <span id="m-chap-title"><b>Inicio</b></span>
+    <span style="font-size:10px;color:var(--gold-soft)">▾</span>
+    <span id="m-dist-pill" class="m-progress-pill">100%</span>
+  </button>
+  <button id="m-next" class="m-nav-btn" aria-label="Siguiente capítulo">›</button>
+</nav>
+
+<!-- Drawer / Menú desplegable móvil -->
+<div id="chapter-drawer" aria-hidden="true">
+  <div class="drawer-content">
+    <div class="drawer-handle"></div>
+    <div class="drawer-header">
+      <h3>Capítulos de la vida de Nash</h3>
+      <button id="drawer-close-btn" class="drawer-close" aria-label="Cerrar">✕</button>
+    </div>
+    <div class="drawer-list">
+      <a href="#hero" class="drawer-item active" data-index="0">
+        <div><b>Inicio</b> · Un hombre, un pasillo</div>
+        <span>1928–2015</span>
+      </a>
+      <a href="#c1" class="drawer-item" data-index="1">
+        <div><b>I. El prodigio</b> · Princeton</div>
+        <span>1928–1950</span>
+      </a>
+      <a href="#c2" class="drawer-item" data-index="2">
+        <div><b>II. El laberinto</b> · Las sombras</div>
+        <span>1959–1980s</span>
+      </a>
+      <a href="#c3" class="drawer-item" data-index="3">
+        <div><b>III. El equilibrio</b> · Teoría de juegos</div>
+        <span>Interactiva</span>
+      </a>
+      <a href="#c4" class="drawer-item" data-index="4">
+        <div><b>IV. La luz</b> · El Nobel</div>
+        <span>1990–2001</span>
+      </a>
+      <a href="#c5" class="drawer-item" data-index="5">
+        <div><b>V. El último viaje</b> · El Premio Abel</div>
+        <span>2015</span>
+      </a>
+      <a href="#epilogo" class="drawer-item" data-index="6">
+        <div><b>Epílogo</b> · El equilibrio recuperado</div>
+        <span>Reflexión</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Contenido Principal -->
 <main>
-  <section id="hero" data-shade=".25">
+  <!-- HERO -->
+  <section id="hero" data-shade=".25" data-title="Inicio">
     <div class="wrap">
-      <div class="kicker">1928 — 2015</div>
+      <div class="kicker">Exposición · 1928 — 2015</div>
       <h1>Un hombre,<br><em>un pasillo</em></h1>
       <p class="sub">Esta es la historia de John Forbes Nash Jr.: un genio que caminó treinta años entre pizarras llenas de ecuaciones, hacia una luz que no sabía si existía.</p>
-      <div class="facts" style="max-width:520px;margin:30px auto 0"><div><b>21</b><span>años al doctorarse</span></div><div><b>1994</b><span>Nobel</span></div><div><b>2015</b><span>Abel</span></div></div>
-      <div class="go">Camina conmigo ↓</div>
+      
+      <div class="facts">
+        <div><b>21</b><span>años al doctorarse</span></div>
+        <div><b>1994</b><span>Premio Nobel</span></div>
+        <div><b>2015</b><span>Premio Abel</span></div>
+      </div>
+      
+      <div>
+        <a href="#c1" class="go-btn">Recorrer el pasillo ↓</a>
+      </div>
     </div>
   </section>
 
-  <section id="c1" data-shade=".55">
+  <!-- CAPÍTULO I -->
+  <section id="c1" data-shade=".52" data-title="I · El prodigio">
     <div class="card">
       <div class="kicker">Capítulo I · 1928 – 1950 · Princeton</div>
-      <div class="photo single"><figure><img src="img/nash-joven.webp" alt="John Nash de joven" loading="lazy"><figcaption>Bluefield → Carnegie → Princeton</figcaption></figure></div>
+      <div class="photo-frame photo-single">
+        <figure>
+          <img src="img/nash-joven.webp" alt="Fotografía de John Nash de joven" loading="lazy" width="680" height="907">
+          <figcaption>Bluefield → Carnegie → Princeton</figcaption>
+        </figure>
+      </div>
       <h2>El <em>prodigio</em></h2>
-      <p>Nació en Bluefield, Virginia Occidental. A los 19 años terminó en Carnegie Tech una licenciatura y una maestría, y uno de sus profesores escribió para recomendarlo:</p>
-      <div class="quote">«Es un genio matemático.»</div>
+      <p>Nació en Bluefield, Virginia Occidental. A los 19 años concluyó en Carnegie Tech su licenciatura y maestría en matemáticas. Su profesor Richard Duffin escribió una de las cartas de recomendación más breves e impactantes de la historia académica:</p>
+      <div class="quote">«Este hombre es un genio matemático.»</div>
       <cite>— Carta de admisión a Princeton, 1948</cite>
-      <p style="margin-top:22px">En Princeton hizo el doctorado en dos años. Su tesis, <i>Non-Cooperative Games</i>, tenía solo 27 páginas. El departamento la juzgó «una contribución muy original e importante». De ahí salió el <b style="color:var(--gold)">equilibrio de Nash</b>, hoy piedra angular de la economía matemática.</p>
+      <p>En Princeton completó su doctorado en tan solo dos años. Su tesis, <i>Non-Cooperative Games</i>, tenía apenas 27 páginas. De aquel documento nació el célebre <b style="color:var(--gold)">equilibrio de Nash</b>, hoy piedra angular de la economía mundial, la biología evolutiva y las ciencias sociales.</p>
     </div>
   </section>
 
-  <section id="c2" class="right" data-shade=".72">
+  <!-- CAPÍTULO II -->
+  <section id="c2" class="right" data-shade=".72" data-title="II · El laberinto">
     <div class="card">
       <div class="kicker">Capítulo II · 1959 – años 80 · El laberinto</div>
       <h2>Las paredes <em>se llenan de signos</em></h2>
-      <p>Era profesor en el MIT y su esposa Alicia esperaba un hijo cuando la esquizofrenia paranoide lo alcanzó. Creía recibir mensajes cifrados en los periódicos. La razón que lo había hecho brillar se volvió su propio laberinto.</p>
-      <p>Fue hospitalizado en varias ocasiones y su carrera quedó interrumpida durante décadas. Vagó en silencio por Fine Hall, en Princeton, escribiendo mensajes y ecuaciones en las pizarras. Los estudiantes lo llamaban <b style="color:var(--gold)">«el Fantasma de Fine Hall»</b>.</p>
-      <p>La comunidad lo respetó y lo protegió. Alicia no se fue.</p>
-      <div class="worlds"><div><b>Un mundo de lógica</b>números, estructuras, pruebas.</div><div><b>Un mundo de sombras</b>mensajes secretos y perseguidores que solo él veía.</div></div>
-      <div class="date">Las paredes del pasillo son esas pizarras.</div>
+      <p>Era profesor en el MIT y su esposa Alicia esperaba un hijo cuando la esquizofrenia paranoide se desató. Comenzó a creer que los periódicos transmitían mensajes cifrados de potencias extranjeras. La misma mente que brillaba descifrando patrones lógicos se convirtió en su propia prisión.</p>
+      <p>Fue hospitalizado en diversas ocasiones y su carrera formal se detuvo durante tres décadas. Vagaba como una sombra por los corredores de Fine Hall en Princeton, llenando pizarras vacías de fórmulas incomprensibles. Estudiantes y colegas lo apodaron con respeto y melancolía <b style="color:var(--gold)">«el Fantasma de Fine Hall»</b>.</p>
+      <p>Alicia nunca lo abandonó; lo acogió como huésped para salvarlo de los manicomios públicos.</p>
+      
+      <!-- Comparación interactiva de los dos mundos -->
+      <div class="worlds-container">
+        <div class="worlds-tabs" role="tablist">
+          <button class="world-tab-btn active" data-world="all">Ver ambos mundos</button>
+          <button class="world-tab-btn" data-world="logic">Mundo de la Lógica</button>
+          <button class="world-tab-btn" data-world="shadows">Mundo de las Sombras</button>
+        </div>
+        <div class="worlds-grid">
+          <div class="world-card logic" id="w-logic">
+            <b>⬡ Lógica Pura</b>
+            <p>Axiomas, números, estructuras geométricas rigurosas y demostraciones incontrovertibles.</p>
+          </div>
+          <div class="world-card shadows" id="w-shadows">
+            <b>〰 Sombras</b>
+            <p>Códigos ocultos, conspiraciones y voces que parecían tan reales como un teorema.</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="date">«Las paredes del pasillo son esas pizarras que nunca guardaron silencio.»</div>
     </div>
   </section>
 
-  <section id="c3" data-shade=".7">
+  <!-- CAPÍTULO III -->
+  <section id="c3" data-shade=".68" data-title="III · El equilibrio">
     <div class="card">
       <div class="kicker">Capítulo III · Teoría de juegos</div>
       <h2>El <em>equilibrio</em></h2>
-      <p>Adam Smith creía que si cada quien busca su interés, todos ganan. Nash mostró que no siempre: a veces, cada uno actuando por su cuenta termina peor que si cooperaran.</p>
-      <p>Juega una ronda. Tu rival es una IA racional.</p>
-      <div class="matrix" aria-label="Matriz de pagos">
-        <div class="h"></div><div class="h">Rival coopera</div><div class="h">Rival traiciona</div>
-        <div class="h">Tú cooperas</div><div class="cell" data-k="cc">3 , 3</div><div class="cell" data-k="ct">0 , 5</div>
-        <div class="h">Tú traicionas</div><div class="cell" data-k="tc">5 , 0</div><div class="cell nash" data-k="tt">1 , 1</div>
+      <p>Adam Smith aseguraba que si cada individuo persigue su propio interés egoísta, la sociedad entera prospera. Nash demostró matemáticamente lo contrario: cuando todos juegan de forma estrictamente egoísta, pueden terminar en un pozo donde todos pierden.</p>
+      
+      <div class="matrix-wrapper">
+        <div class="matrix-legend">Matriz del Dilema del Prisionero (Tú vs. IA Racional)</div>
+        <div class="matrix" aria-label="Matriz de pagos del dilema del prisionero">
+          <div class="matrix-h"></div>
+          <div class="matrix-h">Rival Coopera</div>
+          <div class="matrix-h">Rival Traiciona</div>
+          
+          <div class="matrix-h">Tú Coopera</div>
+          <div class="matrix-cell" data-k="cc">
+            <span class="cell-val">3 , 3</span>
+            <span class="cell-sub">Paz mutua</span>
+          </div>
+          <div class="matrix-cell" data-k="ct">
+            <span class="cell-val">0 , 5</span>
+            <span class="cell-sub">Explotado</span>
+          </div>
+          
+          <div class="matrix-h">Tú Traiciona</div>
+          <div class="matrix-cell" data-k="tc">
+            <span class="cell-val">5 , 0</span>
+            <span class="cell-sub">Ventaja</span>
+          </div>
+          <div class="matrix-cell nash" data-k="tt">
+            <span class="cell-val">1 , 1</span>
+            <span class="cell-sub">Equilibrio</span>
+          </div>
+        </div>
       </div>
-      <div class="btns">
-        <button data-m="c">Cooperar</button>
-        <button data-m="t">Traicionar</button>
+
+      <div class="game-controls">
+        <div class="game-label">Elige tu estrategia frente al rival:</div>
+        <div class="btns">
+          <button class="game-btn" data-m="c" aria-label="Elegir Cooperar">🤝 Cooperar</button>
+          <button class="game-btn" data-m="t" aria-label="Elegir Traicionar">⚔ Traicionar</button>
+        </div>
       </div>
-      <div id="result"></div>
+      
+      <div id="result" aria-live="polite">
+        Selecciona <b>Cooperar</b> o <b>Traicionar</b> para experimentar cómo opera el equilibrio estratégico.
+      </div>
     </div>
   </section>
 
-  <section id="c4" class="right" data-shade=".35" data-glow="1">
+  <!-- CAPÍTULO IV -->
+  <section id="c4" class="right" data-shade=".35" data-glow="1" data-title="IV · La luz">
     <div class="card">
       <div class="kicker">Capítulo IV · 1990 – 2001 · La luz</div>
-      <div class="photo single"><figure><img src="img/nash-maduro.webp" alt="John Nash en su madurez" loading="lazy"><figcaption>Princeton, de regreso</figcaption></figure></div>
+      <div class="photo-frame photo-single">
+        <figure>
+          <img src="img/nash-maduro.webp" alt="Fotografía de John Nash en su madurez" loading="lazy" width="750" height="1000">
+          <figcaption>Princeton, el retorno</figcaption>
+        </figure>
+      </div>
       <h2>La <em>medalla</em> al final del pasillo</h2>
-      <p>Tras unos veinte años de enfermedad, la remisión llegó poco a poco. No fue una cura repentina: aprendió a someter sus pensamientos a un escrutinio lógico y a descartar las voces que contradecían la realidad.</p>
-      <p>En 1994 compartió el Premio Nobel de Economía con Harsanyi y Selten «por su análisis pionero de los equilibrios en los juegos no cooperativos». Su historia llegó al mundo en el libro de Sylvia Nasar y en <i>Una mente brillante</i> (2001), ganadora de cuatro Óscar.</p>
-      <p>Él decía que sus intereses estaban sobre todo en las matemáticas puras y la física teórica.</p>
+      <p>A finales de los años ochenta ocurrió lo inimaginable: la enfermedad remitió paulatinamente. No fue por un fármaco milagroso, sino por una hazaña de disciplina intelectual: Nash decidió someter sus propios delirios al escrutinio lógico y descartar conscientemente las voces que violaban las leyes de la realidad.</p>
+      
+      <div class="award-badge">
+        <div class="award-medal">🎖</div>
+        <div class="award-info">
+          <b>Premio Nobel de Economía (1994)</b>
+          <span>Por el análisis pionero del equilibrio en juegos no cooperativos</span>
+        </div>
+      </div>
+
+      <p>Su historia conmovió al mundo gracias a la biografía de Sylvia Nasar y al largometraje <i>Una mente brillante</i> (2001), ganador de cuatro premios Óscar. Sin embargo, Nash siempre repitió con humildad que su corazón permanecía en las matemáticas puras.</p>
     </div>
   </section>
 
-  <section id="c5" class="center" data-shade=".5" data-glow="1">
+  <!-- CAPÍTULO V -->
+  <section id="c5" class="center" data-shade=".48" data-glow="1" data-title="V · El último viaje">
     <div class="card">
       <div class="kicker">Capítulo V · 23 de mayo de 2015</div>
       <h2>El último <em>viaje</em></h2>
-      <p>A los 86 años, Nash viajó a Oslo a recibir el Premio Abel por sus aportes a la geometría diferencial. De regreso, al salir del aeropuerto de Newark, el taxi en que viajaba con Alicia perdió el control en una autopista de Nueva Jersey.</p>
-      <p>Había recibido el Premio Abel días antes, por sus aportes a las ecuaciones diferenciales parciales no lineales, la obra que los matemáticos consideran la más profunda. Murieron juntos. Después de todo, nunca caminó solo hacia la luz.</p>
+      <p>A los 86 años, Nash viajó a Oslo para recibir el galardón más codiciado de la disciplina matemática internacional:</p>
+      
+      <div class="award-badge" style="justify-content:center;margin:20px auto">
+        <div class="award-medal">✦</div>
+        <div class="award-info">
+          <b>Premio Abel de Matemáticas (2015)</b>
+          <span>Por sus aportes trascendentales a las ecuaciones diferenciales no lineales</span>
+        </div>
+      </div>
+
+      <p>Se convirtió así en el único ser humano en la historia en obtener el Premio Nobel y el Premio Abel. De regreso, al salir del aeropuerto de Newark en dirección a su hogar, el taxi en que viajaba junto a su entrañable Alicia perdió el control en la autopista de Nueva Jersey.</p>
+      <p>Ambos murieron juntos en el acto. Aquel pasillo de sombras y luz que compartieron por más de medio siglo se cerró en silencio. Después de todo, nunca caminó solo.</p>
     </div>
   </section>
 
-  <section id="epilogo" class="center" data-shade=".15" data-glow="1">
+  <!-- EPÍLOGO -->
+  <section id="epilogo" class="center" data-shade=".12" data-glow="1" data-title="Epílogo">
     <div class="card">
       <div class="kicker">Epílogo</div>
-      <h2>Equilibrio</h2>
-      <div class="quote">Nash dedicó su vida a comprender el equilibrio entre las decisiones de los demás, mientras buscaba recuperar el suyo propio.</div>
-      <p>Una mente que ganó el Nobel y perdió la razón, y que aun así encontró un camino de regreso. En teoría de juegos, un equilibrio es un punto donde nadie quiere moverse. Nash, al final, lo encontró.</p>
-      <div class="btns" style="justify-content:center;margin-top:24px"><button id="again">Volver a empezar</button></div>
+      <h2>El <em>equilibrio</em> recuperado</h2>
+      <div class="quote">«Nash dedicó su vida a comprender el equilibrio entre las decisiones de los demás, mientras buscaba con valor recuperar el suyo propio.»</div>
+      <p>Una mente que conquistó la cúspide intelectual, cayó en el abismo de la sinrazón y regresó para legar a la humanidad una nueva forma de entender el mundo. En la teoría de juegos, el equilibrio es aquel estado donde ningún participante desea alterar su curso. Nash, al final, encontró su paz.</p>
+      <div style="margin-top:28px">
+        <button id="again" class="btn-primary">
+          <span>↺</span> Volver al inicio del pasillo
+        </button>
+      </div>
     </div>
   </section>
 </main>
 
-<footer>Proyecto expositivo · Tótem MAC Lima
-<div class="sources">Fuentes: Princeton Graduate School, «John Forbes Nash, Jr.» (Viget Honor Roll) · Princeton University Archives · Nobel Prize 1994 · Abel Prize 2015 · texto corto del proyecto.</div></footer>
+<footer>
+  <div><b>Proyecto Expositivo</b> · Tótem MAC Lima</div>
+  <div class="sources">
+    Fuentes y Archivos: Princeton University Archives · The Nobel Prize (1994) · The Abel Prize (Det Norske Videnskaps-Akademi, 2015) · Sylvia Nasar, <i>A Beautiful Mind</i> · Texto curatorial del proyecto.
+  </div>
+</footer>
 
 <script>
 (function(){
-  var root=document.documentElement, shade=document.getElementById('shade'),
-      dist=document.getElementById('dist'), secs=[].slice.call(document.querySelectorAll('main section')),
-      dots=[].slice.call(document.querySelectorAll('#hud a'));
-  var ticking=false;
+  'use strict';
+  var root = document.documentElement;
+  var dist = document.getElementById('dist');
+  var mobileDist = document.getElementById('m-dist-pill');
+  var mTitle = document.getElementById('m-chap-title');
+  var secs = [].slice.call(document.querySelectorAll('main section'));
+  var hudLinks = [].slice.call(document.querySelectorAll('#hud a'));
+  var drawerLinks = [].slice.call(document.querySelectorAll('.drawer-item'));
+  var ticking = false;
+  var currentIndex = 0;
 
-  function update(){
-    var max=document.documentElement.scrollHeight-innerHeight, p=Math.min(1,Math.max(0,scrollY/max));
-    root.style.setProperty('--p',p.toFixed(4));
-    dist.textContent=Math.round((1-p)*100);
-    // sección activa: la más cercana al centro de la pantalla
-    var mid=innerHeight/2, best=0, bd=1e9;
-    secs.forEach(function(s,i){var r=s.getBoundingClientRect(),d=Math.abs((r.top+r.bottom)/2-mid);if(d<bd){bd=d;best=i}});
-    var s=secs[best];
-    root.style.setProperty('--shade',s.dataset.shade||.5);
-    root.style.setProperty('--glow',s.dataset.glow?Math.min(1,p*1.2):0);
-    dots.forEach(function(d,i){d.classList.toggle('on',i===best)});
-    ticking=false;
+  // Actualización de estado en Scroll
+  function updateScroll() {
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    var p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+    root.style.setProperty('--p', p.toFixed(4));
+    
+    var percent = Math.round((1 - p) * 100);
+    if (dist) dist.textContent = percent;
+    if (mobileDist) mobileDist.textContent = percent + '%';
+
+    // Sección más cercana al centro de pantalla
+    var mid = window.innerHeight / 2;
+    var best = 0, minDistance = 1e9;
+    secs.forEach(function(s, idx){
+      var r = s.getBoundingClientRect();
+      var centerDist = Math.abs((r.top + r.bottom) / 2 - mid);
+      if (centerDist < minDistance) {
+        minDistance = centerDist;
+        best = idx;
+      }
+    });
+
+    if (best !== currentIndex) {
+      currentIndex = best;
+      var activeSec = secs[best];
+      root.style.setProperty('--shade', activeSec.dataset.shade || 0.5);
+      root.style.setProperty('--glow', activeSec.dataset.glow ? Math.min(1, p * 1.3) : 0);
+
+      hudLinks.forEach(function(link, i){
+        link.classList.toggle('on', i === best);
+      });
+      drawerLinks.forEach(function(link, i){
+        link.classList.toggle('active', i === best);
+      });
+
+      if (mTitle) {
+        mTitle.innerHTML = '<b>' + (activeSec.dataset.title || 'Capítulo') + '</b>';
+      }
+    }
+    ticking = false;
   }
-  addEventListener('scroll',function(){if(!ticking){ticking=true;requestAnimationFrame(update)}},{passive:true});
-  addEventListener('resize',update);
-  update();
 
-  // aparición de capítulos
-  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)e.target.classList.add('in')})},{threshold:.25});
-  secs.forEach(function(s){io.observe(s)});
+  window.addEventListener('scroll', function(){
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(updateScroll);
+    }
+  }, { passive: true });
 
-  document.getElementById('again').onclick=function(){scrollTo({top:0})};
+  window.addEventListener('resize', updateScroll);
+  updateScroll();
 
-  // polvo dorado
-  var cv=document.getElementById('dust'),cx=cv.getContext('2d'),W,H,ps=[];
-  function size(){W=cv.width=innerWidth;H=cv.height=innerHeight}
-  size();addEventListener('resize',size);
-  for(var i=0;i<70;i++)ps.push({x:Math.random(),y:Math.random(),r:Math.random()*1.6+.3,v:Math.random()*.00025+.00008,a:Math.random()*.6+.2});
-  if(!matchMedia('(prefers-reduced-motion:reduce)').matches)(function loop(){
-    cx.clearRect(0,0,W,H);
-    ps.forEach(function(q){q.y-=q.v;q.x+=Math.sin(q.y*12)*.0002;if(q.y<0){q.y=1;q.x=Math.random()}
-      cx.fillStyle='rgba(232,185,96,'+q.a+')';cx.beginPath();cx.arc(q.x*W,q.y*H,q.r,0,6.3);cx.fill()});
-    requestAnimationFrame(loop)})();
+  // IntersectionObserver para revelación suave de tarjetas
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+      }
+    });
+  }, { threshold: 0.15 });
 
-  // dilema del prisionero
-  var pay={cc:'3 , 3',ct:'0 , 5',tc:'5 , 0',tt:'1 , 1'},out=document.getElementById('result');
-  document.querySelectorAll('button[data-m]').forEach(function(b){b.onclick=function(){
-    var me=b.dataset.m,k=me+'t'; // la IA siempre traiciona: es su estrategia dominante
-    document.querySelectorAll('.cell').forEach(function(c){c.classList.toggle('hit',c.dataset.k===k)});
-    out.innerHTML= me==='t'
-      ? 'Ambos traicionan: <b>1 , 1</b>. Ninguno puede mejorar cambiando solo. Es el <b style="color:var(--gold)">equilibrio de Nash</b>, aunque ambos estarían mejor en 3 , 3.'
-      : 'Cooperaste y la IA traicionó: <b>0 , 5</b>. Traicionar es mejor sin importar qué haga el otro, y eso empuja a ambos hacia el equilibrio 1 , 1.';
-  }});
+  secs.forEach(function(s){ io.observe(s); });
+
+  // Botón volver a empezar
+  var againBtn = document.getElementById('again');
+  if (againBtn) {
+    againBtn.onclick = function(){
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+  }
+
+  // Navegación móvil: Anterior / Siguiente
+  var prevBtn = document.getElementById('m-prev');
+  var nextBtn = document.getElementById('m-next');
+  if (prevBtn) {
+    prevBtn.onclick = function(){
+      if (currentIndex > 0) {
+        secs[currentIndex - 1].scrollIntoView({ behavior: 'smooth' });
+      }
+    };
+  }
+  if (nextBtn) {
+    nextBtn.onclick = function(){
+      if (currentIndex < secs.length - 1) {
+        secs[currentIndex + 1].scrollIntoView({ behavior: 'smooth' });
+      }
+    };
+  }
+
+  // Drawer de Capítulos móvil
+  var drawer = document.getElementById('chapter-drawer');
+  var drawerTrigger = document.getElementById('m-trigger');
+  var drawerClose = document.getElementById('drawer-close-btn');
+
+  function openDrawer() {
+    drawer.classList.add('open');
+    drawer.setAttribute('aria-hidden', 'false');
+  }
+  function closeDrawer() {
+    drawer.classList.remove('open');
+    drawer.setAttribute('aria-hidden', 'true');
+  }
+
+  if (drawerTrigger) drawerTrigger.onclick = openDrawer;
+  if (drawerClose) drawerClose.onclick = closeDrawer;
+  if (drawer) {
+    drawer.onclick = function(e){
+      if (e.target === drawer) closeDrawer();
+    };
+  }
+  drawerLinks.forEach(function(item){
+    item.addEventListener('click', function(){
+      closeDrawer();
+    });
+  });
+
+  // ---------- Polvo dorado y fórmulas matemáticas en Canvas ----------
+  var cv = document.getElementById('dust');
+  if (cv && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    var cx = cv.getContext('2d');
+    var W = 0, H = 0, particles = [];
+    var glyphs = ['∫', '∑', 'π', '∂', '∞', 'λ', 'f(x)', '∈', '∀', '√'];
+
+    function resizeCanvas() {
+      if (Math.abs(W - window.innerWidth) > 20 || Math.abs(H - window.innerHeight) > 120) {
+        W = cv.width = window.innerWidth;
+        H = cv.height = window.innerHeight;
+      }
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    var count = window.innerWidth < 768 ? 36 : 64;
+    for (var i = 0; i < count; i++) {
+      var isGlyph = i % 7 === 0;
+      particles.push({
+        x: Math.random(),
+        y: Math.random(),
+        r: isGlyph ? 10 : Math.random() * 1.8 + 0.4,
+        v: Math.random() * 0.0003 + 0.0001,
+        a: Math.random() * 0.5 + 0.15,
+        glyph: isGlyph ? glyphs[Math.floor(Math.random() * glyphs.length)] : null,
+        drift: (Math.random() - 0.5) * 0.0003
+      });
+    }
+
+    (function loop(){
+      cx.clearRect(0, 0, W, H);
+      for (var j = 0; j < particles.length; j++) {
+        var p = particles[j];
+        p.y -= p.v;
+        p.x += Math.sin(p.y * 10) * 0.0002 + p.drift;
+        if (p.y < -0.05) { p.y = 1.05; p.x = Math.random(); }
+        if (p.x < -0.05) p.x = 1.05;
+        if (p.x > 1.05) p.x = -0.05;
+
+        if (p.glyph) {
+          cx.font = '12px "Cormorant Garamond", serif';
+          cx.fillStyle = 'rgba(232, 185, 96, ' + (p.a * 0.6) + ')';
+          cx.fillText(p.glyph, p.x * W, p.y * H);
+        } else {
+          cx.fillStyle = 'rgba(232, 185, 96, ' + p.a + ')';
+          cx.beginPath();
+          cx.arc(p.x * W, p.y * H, p.r, 0, 6.28);
+          cx.fill();
+        }
+      }
+      requestAnimationFrame(loop);
+    })();
+  }
+
+  // ---------- Capítulo II: Pestañas de los Dos Mundos ----------
+  var worldTabs = document.querySelectorAll('.world-tab-btn');
+  var cardLogic = document.getElementById('w-logic');
+  var cardShadows = document.getElementById('w-shadows');
+
+  worldTabs.forEach(function(btn){
+    btn.onclick = function(){
+      worldTabs.forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      var mode = btn.dataset.world;
+      if (mode === 'all') {
+        if (cardLogic) cardLogic.style.display = 'block';
+        if (cardShadows) cardShadows.style.display = 'block';
+      } else if (mode === 'logic') {
+        if (cardLogic) cardLogic.style.display = 'block';
+        if (cardShadows) cardShadows.style.display = 'none';
+      } else if (mode === 'shadows') {
+        if (cardLogic) cardLogic.style.display = 'none';
+        if (cardShadows) cardShadows.style.display = 'block';
+      }
+    };
+  });
+
+  // ---------- Capítulo III: Dilema del Prisionero ----------
+  var out = document.getElementById('result');
+  var gameBtns = document.querySelectorAll('button[data-m]');
+  var cells = document.querySelectorAll('.matrix-cell');
+
+  gameBtns.forEach(function(b){
+    b.onclick = function(){
+      gameBtns.forEach(function(btn){ btn.classList.remove('active'); });
+      b.classList.add('active');
+      var userMove = b.dataset.m;
+      // La IA siempre traiciona porque es su estrategia dominante
+      var key = userMove + 't';
+
+      cells.forEach(function(c){
+        c.classList.toggle('hit', c.dataset.k === key);
+      });
+
+      if (userMove === 't') {
+        out.innerHTML = 'Ambos traicionan: <b style="color:#fff">1 , 1</b>.<br>' +
+          'Ninguno puede mejorar su recompensa de forma individual sin que el otro colabore. ' +
+          'Este es el célebre <b style="color:var(--gold)">Equilibrio de Nash</b>: una trampa de racionalidad egoísta de la que nadie puede escapar solo, aunque ambos habrían ganado más (3 , 3) cooperando.';
+      } else {
+        out.innerHTML = 'Tú cooperaste y la IA traicionó: <b style="color:#fff">0 , 5</b>.<br>' +
+          'La IA obtuvo el máximo beneficio explotando tu confianza y tú quedaste en cero. ' +
+          'Precisamente por el miedo a caer en este resultado (0 , 5), los actores racionales se ven obligados a traicionar, convergiendo irremediablemente hacia el equilibrio (1 , 1).';
+      }
+    };
+  });
+
+  // ---------- Atmósfera Sonora con Web Audio API ----------
+  var audioBtn = document.getElementById('audio-toggle');
+  var audioCtx = null;
+  var masterGain = null;
+  var isAudioPlaying = false;
+
+  function toggleAudio() {
+    try {
+      if (!audioCtx) {
+        var AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContextClass();
+
+        masterGain = audioCtx.createGain();
+        masterGain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+
+        var filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(220, audioCtx.currentTime);
+
+        // Acorde cálido y enigmático (Re menor: D2, A2, D3, F3)
+        var freqs = [73.42, 110.0, 146.83, 174.61];
+        freqs.forEach(function(freq, idx){
+          var osc = audioCtx.createOscillator();
+          var g = audioCtx.createGain();
+          osc.type = (idx % 2 === 0) ? 'sine' : 'triangle';
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+          osc.detune.setValueAtTime((idx - 1.5) * 5, audioCtx.currentTime);
+          g.gain.setValueAtTime(0.06 / (idx + 1), audioCtx.currentTime);
+          osc.connect(g);
+          g.connect(filter);
+          osc.start();
+        });
+
+        filter.connect(masterGain);
+        masterGain.connect(audioCtx.destination);
+      }
+
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      isAudioPlaying = !isAudioPlaying;
+      var now = audioCtx.currentTime;
+
+      if (isAudioPlaying) {
+        masterGain.gain.cancelScheduledValues(now);
+        masterGain.gain.linearRampToValueAtTime(0.18, now + 1.5);
+        if (audioBtn) audioBtn.classList.add('audio-on');
+      } else {
+        masterGain.gain.cancelScheduledValues(now);
+        masterGain.gain.linearRampToValueAtTime(0.0001, now + 0.8);
+        if (audioBtn) audioBtn.classList.remove('audio-on');
+      }
+    } catch(err) {
+      console.warn('Audio no disponible:', err);
+    }
+  }
+
+  if (audioBtn) {
+    audioBtn.onclick = toggleAudio;
+  }
+
+  // ---------- Pantalla Completa ----------
+  var fsBtn = document.getElementById('fs-toggle');
+  if (fsBtn) {
+    fsBtn.onclick = function(){
+      if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+        var el = document.documentElement;
+        if (el.requestFullscreen) el.requestFullscreen();
+        else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+      }
+    };
+  }
+
+  // Navegación con teclado (Flechas Arriba/Abajo o Espacio)
+  window.addEventListener('keydown', function(e){
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+      if (currentIndex < secs.length - 1) {
+        e.preventDefault();
+        secs[currentIndex + 1].scrollIntoView({ behavior: 'smooth' });
+      }
+    } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+      if (currentIndex > 0) {
+        e.preventDefault();
+        secs[currentIndex - 1].scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  });
+
 })();
 </script>
 </body>
