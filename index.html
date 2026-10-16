@@ -16,14 +16,14 @@ body{background:var(--ink);color:var(--text);font-family:Inter,system-ui,sans-se
 
 /* ---------- Escenario fijo: el pasillo ---------- */
 #stage{position:fixed;inset:0;z-index:0;overflow:hidden;background:#000}
-#corridor{position:absolute;inset:0;background:url("pasillo.webp") 50% 30%/cover no-repeat;
-  transform-origin:50% 33%;will-change:transform,filter;
+#corridor{position:absolute;inset:0;background:url("img/pasillo-nuevo.webp") 50% 48%/cover no-repeat;
+  transform-origin:50% 48%;will-change:transform,filter;
   transform:scale(calc(1 + var(--p,0)*2.4));
   filter:brightness(calc(.55 + var(--p,0)*.6)) saturate(1.05)}
 #veil{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,transparent 25%,rgba(0,0,0,.75) 100%);pointer-events:none}
 #shade{position:absolute;inset:0;background:#000;opacity:var(--shade,.5);transition:opacity .6s;pointer-events:none}
 #dust{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen}
-#glow{position:absolute;left:50%;top:33%;width:60vmin;height:60vmin;transform:translate(-50%,-50%);
+#glow{position:absolute;left:50%;top:48%;width:60vmin;height:60vmin;transform:translate(-50%,-50%);
   background:radial-gradient(circle,rgba(255,200,100,.55),transparent 65%);opacity:var(--glow,0);pointer-events:none;mix-blend-mode:screen}
 
 /* ---------- Navegación ---------- */
@@ -42,7 +42,7 @@ section.right{justify-content:flex-end}
 section.center{justify-content:center;text-align:center}
 .card{max-width:520px;padding:34px 32px;background:linear-gradient(135deg,rgba(7,6,10,.78),rgba(7,6,10,.5));
   backdrop-filter:blur(6px);border-left:1px solid var(--gold-soft);opacity:0;transform:translateY(40px);transition:opacity 1.2s,transform 1.2s}
-section.center .card{border-left:0;border-top:1px solid var(--gold-soft);max-width:680px}
+section.center .card{border-left:0;;border-top:1px solid var(--gold-soft);max-width:680px}
 .in .card{opacity:1;transform:none}
 .kicker{font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
 h1,h2{font-family:"Cormorant Garamond",serif;font-weight:400;line-height:1.05;color:#fff}
@@ -72,12 +72,28 @@ button{font:inherit;font-size:.8rem;letter-spacing:.15em;text-transform:uppercas
 button:hover{background:var(--gold);color:#000}
 #result{margin-top:16px;min-height:6.5em;font-size:.95rem;color:var(--text)}
 
+/* ---------- Retratos y datos ---------- */
+.photo{display:flex;gap:18px;align-items:flex-end;margin:0 0 22px}
+.photo figure{flex:1;margin:0}
+.photo img{display:block;width:100%;aspect-ratio:3/4;object-fit:cover;filter:grayscale(1) contrast(1.05) brightness(.9);border:1px solid var(--gold-soft)}
+.photo figcaption{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-soft);margin-top:8px}
+.single{max-width:210px;margin-bottom:22px}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:22px 0 0;text-align:center}
+.facts div{border:1px solid rgba(232,185,96,.3);padding:12px 4px;background:rgba(0,0,0,.35)}
+.facts b{display:block;font-family:"Cormorant Garamond",serif;font-size:1.7rem;color:var(--gold);font-weight:400;line-height:1}
+.facts span{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
+.two{max-width:760px}
+.worlds{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px;text-align:left}
+.worlds div{padding:14px;border:1px solid rgba(232,185,96,.25);background:rgba(0,0,0,.35);font-size:.92rem}
+.worlds b{display:block;color:var(--gold);font-family:"Cormorant Garamond",serif;font-size:1.3rem;font-weight:400;margin-bottom:4px}
+cite{display:block;font-size:.8rem;color:var(--muted);font-style:normal;letter-spacing:.1em;margin-top:-8px}
+.sources{margin-top:10px;max-width:640px;margin-inline:auto;line-height:1.8}
 /* ---------- Medalla final ---------- */
 #epilogo .card{background:linear-gradient(135deg,rgba(7,6,10,.55),rgba(7,6,10,.25))}
 footer{position:relative;z-index:10;text-align:center;padding:40px 20px 60px;font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
 footer a{color:var(--gold-soft);text-decoration:none}
 
-@media (max-width:700px){#hud{display:none}.card{padding:26px 22px}section{padding:10vh 5vw}}
+@media (max-width:700px){#hud{display:none}.worlds{grid-template-columns:1fr}.photo{gap:10px}.card{padding:26px 22px}section{padding:10vh 5vw}}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.card{transition:none}#hero .go{animation:none}}
 </style>
 </head>
@@ -108,6 +124,7 @@ footer a{color:var(--gold-soft);text-decoration:none}
       <div class="kicker">1928 — 2015</div>
       <h1>Un hombre,<br><em>un pasillo</em></h1>
       <p class="sub">Esta es la historia de John Forbes Nash Jr.: un genio que caminó treinta años entre pizarras llenas de ecuaciones, hacia una luz que no sabía si existía.</p>
+      <div class="facts" style="max-width:520px;margin:30px auto 0"><div><b>21</b><span>años al doctorarse</span></div><div><b>1994</b><span>Nobel</span></div><div><b>2015</b><span>Abel</span></div></div>
       <div class="go">Camina conmigo ↓</div>
     </div>
   </section>
@@ -115,10 +132,12 @@ footer a{color:var(--gold-soft);text-decoration:none}
   <section id="c1" data-shade=".55">
     <div class="card">
       <div class="kicker">Capítulo I · 1928 – 1950 · Princeton</div>
+      <div class="photo single"><figure><img src="img/nash-joven.webp" alt="John Nash de joven" loading="lazy"><figcaption>Bluefield → Carnegie → Princeton</figcaption></figure></div>
       <h2>El <em>prodigio</em></h2>
-      <p>Nació en Bluefield, Virginia Occidental. Llegó a Princeton con una carta de recomendación de una sola línea:</p>
-      <div class="quote">«Este hombre es un genio.»</div>
-      <p>A los 21 años defendió una tesis de apenas 27 páginas, <i>Non-Cooperative Games</i>. Allí nació una idea que cambiaría la economía, la biología y la política: el equilibrio.</p>
+      <p>Nació en Bluefield, Virginia Occidental. A los 19 años terminó en Carnegie Tech una licenciatura y una maestría, y uno de sus profesores escribió para recomendarlo:</p>
+      <div class="quote">«Es un genio matemático.»</div>
+      <cite>— Carta de admisión a Princeton, 1948</cite>
+      <p style="margin-top:22px">En Princeton hizo el doctorado en dos años. Su tesis, <i>Non-Cooperative Games</i>, tenía solo 27 páginas. El departamento la juzgó «una contribución muy original e importante». De ahí salió el <b style="color:var(--gold)">equilibrio de Nash</b>, hoy piedra angular de la economía matemática.</p>
     </div>
   </section>
 
@@ -127,7 +146,9 @@ footer a{color:var(--gold-soft);text-decoration:none}
       <div class="kicker">Capítulo II · 1959 – años 80 · El laberinto</div>
       <h2>Las paredes <em>se llenan de signos</em></h2>
       <p>Era profesor en el MIT y su esposa Alicia esperaba un hijo cuando la esquizofrenia paranoide lo alcanzó. Creía recibir mensajes cifrados en los periódicos. La razón que lo había hecho brillar se volvió su propio laberinto.</p>
-      <p>Durante tres décadas vagó en silencio por los pasillos de Princeton, escribiendo ecuaciones en las pizarras. La comunidad lo protegió. Alicia no se fue.</p>
+      <p>Fue hospitalizado en varias ocasiones y su carrera quedó interrumpida durante décadas. Vagó en silencio por Fine Hall, en Princeton, escribiendo mensajes y ecuaciones en las pizarras. Los estudiantes lo llamaban <b style="color:var(--gold)">«el Fantasma de Fine Hall»</b>.</p>
+      <p>La comunidad lo respetó y lo protegió. Alicia no se fue.</p>
+      <div class="worlds"><div><b>Un mundo de lógica</b>números, estructuras, pruebas.</div><div><b>Un mundo de sombras</b>mensajes secretos y perseguidores que solo él veía.</div></div>
       <div class="date">Las paredes del pasillo son esas pizarras.</div>
     </div>
   </section>
@@ -154,9 +175,11 @@ footer a{color:var(--gold-soft);text-decoration:none}
   <section id="c4" class="right" data-shade=".35" data-glow="1">
     <div class="card">
       <div class="kicker">Capítulo IV · 1990 – 2001 · La luz</div>
+      <div class="photo single"><figure><img src="img/nash-maduro.webp" alt="John Nash en su madurez" loading="lazy"><figcaption>Princeton, de regreso</figcaption></figure></div>
       <h2>La <em>medalla</em> al final del pasillo</h2>
-      <p>Hacia 1990 Nash recuperó gradualmente la lucidez. No fue una cura repentina: aprendió a someter sus pensamientos a un escrutinio lógico y a descartar las voces que contradecían la realidad.</p>
-      <p>En 1994 recibió el Premio Nobel de Economía junto a Harsanyi y Selten. Su vida llegó al mundo en el libro de Sylvia Nasar y en <i>Una mente brillante</i> (2001), ganadora de cuatro Óscar.</p>
+      <p>Tras unos veinte años de enfermedad, la remisión llegó poco a poco. No fue una cura repentina: aprendió a someter sus pensamientos a un escrutinio lógico y a descartar las voces que contradecían la realidad.</p>
+      <p>En 1994 compartió el Premio Nobel de Economía con Harsanyi y Selten «por su análisis pionero de los equilibrios en los juegos no cooperativos». Su historia llegó al mundo en el libro de Sylvia Nasar y en <i>Una mente brillante</i> (2001), ganadora de cuatro Óscar.</p>
+      <p>Él decía que sus intereses estaban sobre todo en las matemáticas puras y la física teórica.</p>
     </div>
   </section>
 
@@ -165,7 +188,7 @@ footer a{color:var(--gold-soft);text-decoration:none}
       <div class="kicker">Capítulo V · 23 de mayo de 2015</div>
       <h2>El último <em>viaje</em></h2>
       <p>A los 86 años, Nash viajó a Oslo a recibir el Premio Abel por sus aportes a la geometría diferencial. De regreso, al salir del aeropuerto de Newark, el taxi en que viajaba con Alicia perdió el control en una autopista de Nueva Jersey.</p>
-      <p>Murieron juntos, en el acto. Después de todo, nunca caminó solo hacia la luz.</p>
+      <p>Había recibido el Premio Abel días antes, por sus aportes a las ecuaciones diferenciales parciales no lineales, la obra que los matemáticos consideran la más profunda. Murieron juntos. Después de todo, nunca caminó solo hacia la luz.</p>
     </div>
   </section>
 
@@ -173,13 +196,15 @@ footer a{color:var(--gold-soft);text-decoration:none}
     <div class="card">
       <div class="kicker">Epílogo</div>
       <h2>Equilibrio</h2>
+      <div class="quote">Nash dedicó su vida a comprender el equilibrio entre las decisiones de los demás, mientras buscaba recuperar el suyo propio.</div>
       <p>Una mente que ganó el Nobel y perdió la razón, y que aun así encontró un camino de regreso. En teoría de juegos, un equilibrio es un punto donde nadie quiere moverse. Nash, al final, lo encontró.</p>
       <div class="btns" style="justify-content:center;margin-top:24px"><button id="again">Volver a empezar</button></div>
     </div>
   </section>
 </main>
 
-<footer>Proyecto expositivo · Tótem MAC Lima · <a href="presentaci_n_interactiva_de_john_nash.html">Ver presentación del póster</a></footer>
+<footer>Proyecto expositivo · Tótem MAC Lima · <a href="presentaci_n_interactiva_de_john_nash.html">Ver presentación del póster</a>
+<div class="sources">Fuentes: Princeton Graduate School, «John Forbes Nash, Jr.» (Viget Honor Roll) · Princeton University Archives · Nobel Prize 1994 · Abel Prize 2015 · texto corto del proyecto.</div></footer>
 
 <script>
 (function(){
