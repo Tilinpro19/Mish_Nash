@@ -277,32 +277,6 @@ body {
   opacity: 0.85;
 }
 
-/* Indicador de distancia escritorio */
-#meters {
-  position: fixed;
-  left: max(24px, var(--safe-left));
-  bottom: max(24px, var(--safe-bottom));
-  z-index: 50;
-  font-size: 11px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--gold-soft);
-  background: rgba(12, 11, 16, 0.7);
-  padding: 8px 16px;
-  border-radius: 20px;
-  border: 1px solid rgba(232, 185, 96, 0.2);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-#meters b {
-  color: var(--gold-light);
-  font-variant-numeric: tabular-nums;
-  min-width: 28px;
-}
-
 /* ---------- Barra flotante inferior Móvil (Thumb-zone) ---------- */
 #mobile-nav {
   display: none;
@@ -364,16 +338,6 @@ body {
   font-weight: 500;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-.m-progress-pill {
-  font-size: 11px;
-  font-variant-numeric: tabular-nums;
-  color: var(--gold-light);
-  background: rgba(232, 185, 96, 0.15);
-  padding: 3px 8px;
-  border-radius: 12px;
-  border: 1px solid rgba(232, 185, 96, 0.25);
-  margin-left: 4px;
 }
 
 /* Drawer / Sheet de Capítulos para Móvil */
@@ -1034,7 +998,6 @@ footer b {
 /* ---------- Responsive Breakpoints ---------- */
 @media (max-width: 860px) {
   #hud { display: none; }
-  #meters { display: none; }
   #mobile-nav { display: flex; }
   section {
     padding: clamp(60px, 10vh, 90px) 16px;
@@ -1085,6 +1048,36 @@ footer b {
   #hero .go-btn { animation: none; }
   #dust { display: none; }
 }
+
+/* ---------- Animaciones extra ---------- */
+@keyframes rise{from{opacity:0;transform:translateY(22px);filter:blur(6px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes shimmer{to{background-position:200% center}}
+@keyframes sweep{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+@keyframes floaty{50%{transform:translateY(-6px)}}
+@keyframes medalPulse{0%,100%{box-shadow:0 0 0 0 rgba(232,185,96,.45)}50%{box-shadow:0 0 0 14px rgba(232,185,96,0)}}
+@keyframes heroIn{from{opacity:0;transform:translateY(40px) scale(.97);filter:blur(14px);letter-spacing:.06em}to{opacity:1;transform:none;filter:blur(0)}}
+.card>*{opacity:0}
+.in .card>*{animation:rise .9s cubic-bezier(.16,1,.3,1) forwards}
+.in .card>*:nth-child(1){animation-delay:.15s}.in .card>*:nth-child(2){animation-delay:.3s}
+.in .card>*:nth-child(3){animation-delay:.45s}.in .card>*:nth-child(4){animation-delay:.6s}
+.in .card>*:nth-child(5){animation-delay:.75s}.in .card>*:nth-child(6){animation-delay:.9s}
+.in .card>*:nth-child(n+7){animation-delay:1.05s}
+h1 em,h2 em,h3 em{background:linear-gradient(90deg,var(--gold),#fff3c9,var(--gold));background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shimmer 5s linear infinite}
+.card::before{overflow:hidden}
+.card::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+  background:radial-gradient(420px circle at var(--mx,50%) var(--my,0%),rgba(232,185,96,.10),transparent 60%);opacity:0;transition:opacity .4s}
+.card:hover::after{opacity:1}
+.in .card{animation:none}
+#hero h1{animation:heroIn 1.8s .3s cubic-bezier(.16,1,.3,1) both}
+.photo-frame figure{animation:floaty 7s ease-in-out infinite}
+.photo-frame img{transition:transform 1.2s ease,filter .6s}
+.award-medal{animation:medalPulse 3s ease-out infinite;border-radius:50%}
+.award-badge{transition:transform .4s,box-shadow .4s}
+.award-badge:hover{transform:translateY(-3px);box-shadow:0 12px 30px -8px rgba(232,185,96,.35)}
+button{transition:transform .25s,box-shadow .3s,background .3s,color .3s}
+button:hover{transform:translateY(-2px)}
+button:active{transform:scale(.97)}
+@media (prefers-reduced-motion:reduce){.card>*{opacity:1;animation:none!important}h1 em,h2 em,h3 em,.photo-frame figure,.award-medal,#hero h1{animation:none!important}}
 </style>
 </head>
 <body>
@@ -1130,18 +1123,12 @@ footer b {
   <a href="#epilogo" data-index="6"><span>Epílogo</span></a>
 </nav>
 
-<!-- Indicador de distancia en escritorio -->
-<div id="meters" aria-hidden="true">
-  Hacia la luz · <b id="dist">100</b>%
-</div>
-
 <!-- Barra de navegación flotante para Celulares -->
 <nav id="mobile-nav" aria-label="Navegación móvil">
   <button id="m-prev" class="m-nav-btn" aria-label="Capítulo anterior">‹</button>
   <button id="m-trigger" class="m-chapter-trigger" aria-label="Ver lista de capítulos">
     <span id="m-chap-title"><b>Inicio</b></span>
     <span style="font-size:10px;color:var(--gold-soft)">▾</span>
-    <span id="m-dist-pill" class="m-progress-pill">100%</span>
   </button>
   <button id="m-next" class="m-nav-btn" aria-label="Siguiente capítulo">›</button>
 </nav>
@@ -1233,7 +1220,7 @@ footer b {
       <h2>Las paredes <em>se llenan de signos</em></h2>
       <p>Era profesor en el MIT y su esposa Alicia esperaba un hijo cuando la esquizofrenia paranoide se desató. Comenzó a creer que los periódicos transmitían mensajes cifrados de potencias extranjeras. La misma mente que brillaba descifrando patrones lógicos se convirtió en su propia prisión.</p>
       <p>Fue hospitalizado en diversas ocasiones y su carrera formal se detuvo durante tres décadas. Vagaba como una sombra por los corredores de Fine Hall en Princeton, llenando pizarras vacías de fórmulas incomprensibles. Estudiantes y colegas lo apodaron con respeto y melancolía <b style="color:var(--gold)">«el Fantasma de Fine Hall»</b>.</p>
-      <p>Alicia nunca lo abandonó; lo acogió como huésped para salvarlo de los manicomios públicos.</p>
+      <p>Aun después de divorciarse en 1963, Alicia lo acogió en su casa para salvarlo de los manicomios públicos. Nunca dejó de apoyarlo.</p>
       
       <!-- Comparación interactiva de los dos mundos -->
       <div class="worlds-container">
@@ -1372,7 +1359,7 @@ footer b {
 <footer>
   <div><b>Proyecto Expositivo</b> · Tótem MAC Lima</div>
   <div class="sources">
-    Fuentes y Archivos: Princeton University Archives · The Nobel Prize (1994) · The Abel Prize (Det Norske Videnskaps-Akademi, 2015) · Sylvia Nasar, <i>A Beautiful Mind</i> · Texto curatorial del proyecto.
+    Fuentes y Archivos: Princeton University Archives · The Nobel Prize (1994) · The Abel Prize (Det Norske Videnskaps-Akademi, 2015) · Princeton Graduate School, «John Forbes Nash, Jr.» · Sylvia Nasar, <i>A Beautiful Mind</i> · Texto curatorial del proyecto.
   </div>
 </footer>
 
@@ -1380,8 +1367,6 @@ footer b {
 (function(){
   'use strict';
   var root = document.documentElement;
-  var dist = document.getElementById('dist');
-  var mobileDist = document.getElementById('m-dist-pill');
   var mTitle = document.getElementById('m-chap-title');
   var secs = [].slice.call(document.querySelectorAll('main section'));
   var hudLinks = [].slice.call(document.querySelectorAll('#hud a'));
@@ -1395,9 +1380,6 @@ footer b {
     var p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
     root.style.setProperty('--p', p.toFixed(4));
     
-    var percent = Math.round((1 - p) * 100);
-    if (dist) dist.textContent = percent;
-    if (mobileDist) mobileDist.textContent = percent + '%';
 
     // Sección más cercana al centro de pantalla
     var mid = window.innerHeight / 2;
@@ -1440,6 +1422,24 @@ footer b {
 
   window.addEventListener('resize', updateScroll);
   updateScroll();
+
+  // Foco de luz dorado que sigue al cursor sobre las tarjetas
+  document.querySelectorAll('.card').forEach(function(c){
+    c.addEventListener('pointermove',function(e){
+      var r=c.getBoundingClientRect();
+      c.style.setProperty('--mx',(e.clientX-r.left)+'px');
+      c.style.setProperty('--my',(e.clientY-r.top)+'px');
+    });
+  });
+
+  // Cuenta animada de las cifras del inicio
+  document.querySelectorAll('#hero [class*="stat"] b, #hero .facts b').forEach(function(el){
+    var end=parseInt(el.textContent,10); if(!end) return;
+    var t0=null;
+    (function step(t){t0=t0||t;var k=Math.min(1,(t-t0)/1800);
+      el.textContent=Math.round(end*(1-Math.pow(1-k,3)));
+      if(k<1)requestAnimationFrame(step)})(performance.now());
+  });
 
   // IntersectionObserver para revelación suave de tarjetas
   var io = new IntersectionObserver(function(entries){
